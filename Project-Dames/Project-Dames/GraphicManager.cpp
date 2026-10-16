@@ -58,25 +58,25 @@ string GraphicManager::getImagePath(IMAGE_NAME name){
     string path;
     switch (name) {
         case GRAFIC_FONS:
-            path = "data/GUI/fons.png";
+            path = "fons.png";
             break;
         case GRAFIC_TAULER:
-            path = "data/GUI/tauler.png";
+            path = "tauler.png";
             break;
 		case GRAFIC_POSICIO_VALIDA:
-			path = "data/GUI/posicio_valida.png";
+			path = "posicio_valida.png";
 			break;
         case GRAFIC_FITXA_BLANCA:
-            path = "data/Fitxes/fitxa_blanca.png";
+            path = "fitxa_blanca.png";
             break;
         case GRAFIC_DAMA_BLANCA:
-            path = "data/Fitxes/dama_blanca.png";
+            path = "dama_blanca.png";
             break;
         case GRAFIC_FITXA_NEGRA:
-            path = "data/Fitxes/fitxa_negra.png";
+            path = "fitxa_negra.png";
             break;
         case GRAFIC_DAMA_NEGRA:
-            path = "data/Fitxes/dama_negra.png";
+            path = "dama_negra.png";
             break;
         default:
             path = "";
@@ -94,7 +94,7 @@ string GraphicManager::getFontPath(FONT_NAME name){
         case FONT_GREEN_30:
         case FONT_RED_30:
         case FONT_WHITE_30:
-            path = "data/Fonts/FreeSans.ttf";
+            path = "FreeSans.ttf";
             break;
             
         default:

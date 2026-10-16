@@ -1,6 +1,7 @@
-﻿#include "joc.hpp"
+#include "joc.hpp"
 #include "GraphicManager.h"
 #include <algorithm>
+#include <stdexcept>
 #include <vector>  // para std::vector
 #include "moviment.hpp"
 
@@ -11,7 +12,7 @@ Joc::Joc()
 {}
 
 Joc::~Joc() {
-    finalitza();
+    // Saving is explicit: destructors must not throw.
 }
 
 void Joc::inicialitza(ModeJoc mode,
@@ -23,6 +24,8 @@ void Joc::inicialitza(ModeJoc mode,
     jugadorActual_ = 0;
     fitxaSeleccionada_ = false;
     posicionsValides_.clear();
+    cua_.vaciar();
+    mousePressed_ = false;
 
     // Carrega el tauler des del fitxer
     tauler_.inicialitza(nomFitxerTauler);
@@ -95,7 +98,9 @@ bool Joc::actualitza(int mouseX, int mouseY, bool mouseStatus)
     }
 
     // ─── LÒGICA INPUT ──────────────────────────
-    if (!mouseStatus) {
+    const bool newClick = mouseStatus && !mousePressed_;
+    mousePressed_ = mouseStatus;
+    if (!newClick || mode_ == MODE_JOC_NONE) {
         // sempre redraw
         return true;
     }
@@ -107,7 +112,10 @@ bool Joc::actualitza(int mouseX, int mouseY, bool mouseStatus)
     if (mode_ == MODE_JOC_NORMAL) {
         // Selecció
         if (!fitxaSeleccionada_) {
-            Posicio dests[32];
+            Fitxa* selected = tauler_.getFitxa(clic);
+            const auto color = jugadorActual_ == 0 ? COLOR_BLANC : COLOR_NEGRE;
+            if (!selected || selected->getColor() != color) return true;
+            Posicio dests[64];
             int n = 0;
             tauler_.getPosicionsPossibles(clic, n, dests);
             if (n > 0) {
@@ -125,9 +133,7 @@ bool Joc::actualitza(int mouseX, int mouseY, bool mouseStatus)
             );
             if (it != posicionsValides_.end()) {
                 if (tauler_.mouFitxa(origenSeleccionat_, clic)) {
-                    Moviment m(origenSeleccionat_);
-                    m.afegeix(clic);
-                    cua_.encola(m);
+                    cua_.encola(tauler_.getUltimMoviment());
                     jugadorActual_ = 1 - jugadorActual_;
                 }
             }
@@ -142,7 +148,11 @@ bool Joc::actualitza(int mouseX, int mouseY, bool mouseStatus)
             std::vector<Posicio> seq = m.getSeq();
             Posicio origen = seq.front();
             Posicio desti = seq.back();
-            tauler_.mouFitxa(origen, desti);
+            const Fitxa* piece = tauler_.getFitxa(origen);
+            const auto color = jugadorActual_ == 0 ? COLOR_BLANC : COLOR_NEGRE;
+            if (!piece || piece->getColor() != color ||
+                !(tauler_.mouFitxa(m) || (seq.size() == 2 && tauler_.mouFitxa(origen, desti))))
+                throw std::runtime_error("Invalid replay move");
             jugadorActual_ = 1 - jugadorActual_;
         }
     }

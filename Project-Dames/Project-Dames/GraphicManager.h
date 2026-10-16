@@ -9,8 +9,8 @@
 #ifndef GraphicManager_hpp
 #define GraphicManager_hpp
 
-#include "../Graphic Lib/libreria.h"
-#include "../Graphic Lib/NFont/NFont.h"
+#include "libreria.h"
+#include "NFont.h"
 #include <stdio.h>
 #include <string>
 #include <map>

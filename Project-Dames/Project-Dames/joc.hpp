@@ -16,14 +16,14 @@ public:
 
     /**
      * Inicialitza el joc (MODE_JOC_NORMAL o MODE_JOC_REPLAY),
-     * carregant l’estat inicial del tauler i, si és replay, la cua de moviments.
+     * carregant lâ€™estat inicial del tauler i, si Ã©s replay, la cua de moviments.
      */
     void inicialitza(ModeJoc mode,
         const std::string& nomFitxerTauler,
         const std::string& nomFitxerMoviments);
 
     /**
-     * Processa un clic del ratolí i dibuixa tot el que cal:
+     * Processa un clic del ratolÃ­ i dibuixa tot el que cal:
      *  - fons, tauler, peces, highlights, text
      * Retorna true si volem redraw (sempre true).
      */
@@ -41,11 +41,12 @@ private:
     int                   jugadorActual_;      // 0=blanques,1=negres
 
     bool                  fitxaSeleccionada_;
+    bool                  mousePressed_ = false;
     Posicio               origenSeleccionat_;
     std::vector<Posicio>  posicionsValides_;
     std::string           nomFitxerMoviments_;
 
-    /** Converteix coordenades de píxel a casella (fila,columna). */
+    /** Converteix coordenades de pÃ­xel a casella (fila,columna). */
     bool pixelACasella(int x, int y, Posicio& out) const;
 };
 

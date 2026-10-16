@@ -1,10 +1,12 @@
 #include "cuamoviments.hpp"
 #include <fstream>
 #include <stdexcept>
+#include <sstream>
+#include <vector>
 #include "moviment.hpp"
 
 
-// Constructor: comença amb cua buida
+// Constructor: comenÃ§a amb cua buida
 CuaMoviments::CuaMoviments()
     : cap(nullptr), cua(nullptr) {}
 
@@ -14,6 +16,7 @@ CuaMoviments::~CuaMoviments() {
 }
 
 void CuaMoviments::encola(const Moviment& m) {
+    if (m.longitud() < 2) throw std::invalid_argument("Move needs at least two positions");
     Nodo* nou = new Nodo(m);
     if (cua) {
         cua->seguent = nou;
@@ -58,12 +61,13 @@ void CuaMoviments::guardaEnFichero(const std::string& nomFitxer) {
     }
     for (Nodo* it = cap; it; it = it->seguent) {
         const std::vector<Posicio>& seq = it->moviment.getSeq();
-        // Escriu posició inicial i final del moviment
-        out << seq.front().toString()
-            << ' '
-            << seq.back().toString()
-            << '\n';
+        for (std::size_t i=0;i<seq.size();++i) {
+            if (i) out << ' ';
+            out << seq[i].toString();
+        }
+        out << '\n';
     }
+    if (!out) throw std::runtime_error("Cannot write moves: " + nomFitxer);
 }
 
 void CuaMoviments::cargaDeFichero(const std::string& nomFitxer) {
@@ -71,10 +75,17 @@ void CuaMoviments::cargaDeFichero(const std::string& nomFitxer) {
     if (!in) {
         throw std::runtime_error("No es pot obrir fitxer per llegir: " + nomFitxer);
     }
-    std::string origen, desti;
-    while (in >> origen >> desti) {
-        Moviment m{ Posicio(origen) };
-        m.afegeix(Posicio(desti));
-        encola(m);
+    std::vector<Moviment> loaded;
+    std::string line;
+    while (std::getline(in,line)) {
+        std::istringstream row(line);
+        std::string square;
+        Moviment move;
+        while (row >> square) move.afegeix(Posicio(square));
+        if (move.longitud()==0) continue;
+        if (move.longitud()<2) throw std::runtime_error("Incomplete replay move");
+        loaded.push_back(move);
     }
+    vaciar();
+    for (const auto& move:loaded) encola(move);
 }

@@ -5,9 +5,9 @@
 #include "moviment.hpp"
 
 /**
- * @brief Estructura din‡mica de cua enllaÁada per emmagatzemar Moviment.
+ * @brief Estructura din√†mica de cua enlla√ßada per emmagatzemar Moviment.
  *
- * En Modo Normal es fa push de cada moviment desprÈs d'executar-se.
+ * En Modo Normal es fa push de cada moviment despr√©s d'executar-se.
  * En Modo Replay es fa pop per reproduir-los en ordre.
  */
 class CuaMoviments {
@@ -19,37 +19,39 @@ private:
     };
 
     Nodo* cap;   ///< Punter al primer element
-    Nodo* cua;   ///< Punter a l'˙ltim element
+    Nodo* cua;   ///< Punter a l'√∫ltim element
 
 public:
     CuaMoviments();
     ~CuaMoviments();
+    CuaMoviments(const CuaMoviments&) = delete;
+    CuaMoviments& operator=(const CuaMoviments&) = delete;
 
     /** Afegeix un Moviment al final de la cua. */
     void encola(const Moviment& m);
 
     /**
      * Retira i retorna el primer Moviment de la cua.
-     * @throws std::runtime_error si la cua est‡ buida.
+     * @throws std::runtime_error si la cua est√† buida.
      */
     Moviment desencola();
 
     /** Retorna true si no hi ha cap moviment a la cua. */
     bool estaVacia() const;
 
-    /** Buida completament la cua, alliberant tota la memÚria. */
+    /** Buida completament la cua, alliberant tota la mem√≤ria. */
     void vaciar();
 
     /**
      * Guarda tots els moviments de la cua en un fitxer.
-     * Cada lÌnia tÈ format "origen desti\n".
+     * Cada l√≠nia t√© format "origen [salts...] desti\n".
      * @throws std::runtime_error si no es pot obrir el fitxer.
      */
     void guardaEnFichero(const std::string& nomFitxer);
 
     /**
      * Carrega moviments des d'un fitxer i els encola.
-     * Se suposa que cada lÌnia est‡ en format "origen desti".
+     * Se suposa que cada l√≠nia est√† en format "origen [salts...] desti".
      * @throws std::runtime_error si no es pot obrir el fitxer.
      */
     void cargaDeFichero(const std::string& nomFitxer);
