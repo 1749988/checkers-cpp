@@ -31,3 +31,16 @@
 *.out
 *.app
 /.vs
+
+# Local IDE state and build output (at any depth)
+.vs/
+x64/
+Debug/
+Release/
+build/
+*.pdb
+*.idb
+*.tlog
+*.log
+*.vcxproj.user
+recorded_moves.txt

@@ -1,0 +1,8 @@
+* text=auto
+*.cpp text eol=lf
+*.hpp text eol=lf
+*.md text eol=lf
+"Project-Dames/Project-Dames/2. Platforms/**" linguist-vendored
+Project-Dames/Project-Dames/NFont* linguist-vendored
+Project-Dames/Project-Dames/SDL_FontCache* linguist-vendored
+Project-Dames/Project-Dames/stb_vorbis* linguist-vendored
